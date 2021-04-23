@@ -1,0 +1,13 @@
+diff --git a/src/main.c b/src/main.c
+index 94b72e6..27ca2ba 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -18,7 +18,7 @@
+ #include <re_dbg.h>
+ 
+ 
+-static const char *modpath = "/usr/local/lib/baresip/modules";
++static const char *modpath = "/usr/local/lib64/baresip/modules";
+ 
+ 
+ static const char *modv[] = {

@@ -1,0 +1,13 @@
+diff --git a/re/src/sipreg/reg.c b/re/src/sipreg/reg.c
+index e9a08f5..6ea5d3a 100644
+--- a/re/src/sipreg/reg.c
++++ b/re/src/sipreg/reg.c
+@@ -286,6 +286,8 @@ static int send_handler(enum sip_transp tp, const struct sa *src,
+ 
+ 	err |= mbuf_printf(mb, "\r\n");
+ 
++	err |= mbuf_printf(mb, "Expires: %u\r\n",reg->expires);
++
+ 	return err;
+ }
+ 

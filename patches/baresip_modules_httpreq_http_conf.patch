@@ -1,0 +1,20 @@
+--- a/baresip/modules/httpreq/httpreq.c.orig	2020-11-02 15:47:19.681001869 +0100
++++ b/baresip/modules/httpreq/httpreq.c	2020-11-02 15:47:52.007003295 +0100
+@@ -398,6 +398,7 @@
+ 
+ static int cmd_settimeout(struct re_printf *pf, void *arg)
+ {
++#if 0
+ 	const struct cmd_arg *carg = arg;
+ 	struct http_conf conf;
+ 	uint32_t v;
+@@ -416,6 +417,9 @@
+ 	conf.idle_timeout = 900000;
+ 
+ 	return http_client_set_config(d->client, &conf);
++#else
++    return 0;
++#endif
+ }
+ 
+ 

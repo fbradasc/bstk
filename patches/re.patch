@@ -1,0 +1,22 @@
+diff --git a/re/include/re_types.h b/re/include/re_types.h
+index 517321d..824ab96 100644
+--- a/re/include/re_types.h
++++ b/re/include/re_types.h
+@@ -47,14 +47,15 @@ typedef unsigned long long int    uint64_t;
+ #endif /* __BIT_TYPES_DEFINED__ */
+ 
+ #endif /* __int8_t_defined */
+-#ifndef __ssize_t_defined
++#if !defined(__ssize_t_defined) && !defined(_SSIZE_T_DEFINED_)
+ typedef long     ssize_t;
+ #define __ssize_t_defined
++#define _SSIZE_T_DEFINED_
+ #endif
+ 
+ 
+ #ifndef WIN32
+-typedef uint32_t socklen_t;
++typedef __socklen_t socklen_t;
+ #endif
+ #endif
+ 
