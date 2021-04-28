@@ -7,7 +7,11 @@ MKFILES := libsrtp/Makefile \
 
 TOPATCH := $(patsubst %,%_patch,$(MKFILES))
 
-INSTALL := sudo
+ifeq ($(DESTDIR),)
+DESTDIR := $(shell pwd)/install
+endif
+
+INSTALL := DESTDIR=$(DESTDIR)
 
 all: build
 
@@ -33,13 +37,13 @@ libsrtp/Makefile:
 	@echo
 	@echo "Creating $@"
 	@echo
-	cd libsrtp && ./configure
+	cd libsrtp && ./configure --prefix=/usr
 
 libzrtp/Makefile: libzrtp/configure
 	@echo
 	@echo "Creating $@"
 	@echo
-	cd libzrtp && ./configure
+	cd libzrtp && ./configure --prefix=/usr
 
 libzrtp/third_party/bnlib/Makefile: libzrtp/Makefile
 

@@ -4,11 +4,13 @@ MODULES := libzrtp rem re baresip retest
 
 ifeq ($(TARGET),android)
   MODULES := openssl opus ogg $(MODULES)
-  PATCHES := patches/re.patch patches/re_flexisip_registration_issue.patch
+  PATCHES := patches/re.patch
+  PATCHES += patches/re_flexisip_registration_issue.patch
 else
   MODULES := libsrtp $(MODULES)
   PATCHES := /dev/null
   PATCHES := patches/re_flexisip_registration_issue.patch
+  PATCHES += patches/libzrtp_install_prefix.patch
   # PATCHES := patches/baresip_modules_httpreq_http_conf.patch
 endif
 
