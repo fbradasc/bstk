@@ -1,6 +1,6 @@
 PATCHES :=
 
-MODULES := libzrtp rem re baresip retest
+MODULES := libzrtp re rem baresip retest
 
 ifeq ($(TARGET),android)
   MODULES := openssl opus ogg $(MODULES)
@@ -18,13 +18,13 @@ TOWIPEALL   := $(patsubst %,%_wipeall,$(MODULES))
 TOBUILD     := $(patsubst %,%_build,$(MODULES))
 TOUNINSTALL := $(patsubst %,%_uninstall,$(MODULES))
 
-prepare: update $(MODULES)
-
 ifneq ($(findstring android, $(TARGET)),)
   include Makefile.android
 else
   include Makefile.unix
 endif
+
+prepare: update $(MODULES)
 
 update: gitinit gitclean gitupdate
 
