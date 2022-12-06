@@ -64,4 +64,4 @@ libzrtp/configure:
 	cd libzrtp && ./bootstrap.sh
 
 test: build
-	@cd retest && ./retest -r -v
+	@cd retest && LD_LIBRARY_PATH=$(DESTDIR)/usr/lib:$(DESTDIR)/usr/lib64 ./retest -r -v
