@@ -29,6 +29,7 @@ $(TOBUILD):
 	@echo
 	@echo "Building $@"
 	@echo
+	mkdir -p $(DESTDIR)
 	cd $(@:_build=) && make EXTRACFLAGS=-DHAVE_INTTYPES_H
 	cd $(@:_build=) && $(INSTALL) make install
 	-cd $(@:_build=) && $(INSTALL) make install-dev
