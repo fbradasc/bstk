@@ -1,50 +1,82 @@
-MKFILES := libsrtp/Makefile \
-	libzrtp/Makefile \
+MKFILES := libzrtp/Makefile \
 	libzrtp/third_party/bnlib/Makefile \
-	re/Makefile \
-	rem/Makefile \
-	baresip/Makefile
 
 TOPATCH := $(patsubst %,%_patch,$(MKFILES))
 
-ifeq ($(DESTDIR),)
-DESTDIR := $(shell pwd)/install
-endif
+TARGET_INSTALL_PREFIX ?= $(shell pwd)/install
+BARESIP_APP_MODULES   ?=
 
-INSTALL := DESTDIR=$(DESTDIR)
+all: prepare patch build
 
-all: build
+build: $(TOBUILD_GMAKE) $(TOBUILD_CMAKE)
 
-uninstall: prepare $(TOUNINSTALL)
-
-build: prepare patch $(MKFILES) $(TOPATCH) $(TOBUILD)
-
-$(TOUNINSTALL):
-	@echo
-	@echo "Uninstalling $@"
-	@echo
-	cd $(@:_uninstall=) && $(INSTALL) make uninstall
-
-$(TOBUILD):
-	@echo
-	@echo "Building $@"
-	@echo
-	mkdir -p $(DESTDIR)
-	cd $(@:_build=) && make EXTRACFLAGS=-DHAVE_INTTYPES_H
-	cd $(@:_build=) && $(INSTALL) make install
-	-cd $(@:_build=) && $(INSTALL) make install-dev
-
-libsrtp/Makefile:
+$(CMAKE_CONFIG):
 	@echo
 	@echo "Creating $@"
 	@echo
-	cd libsrtp && ./configure --prefix=/usr
+	cd $(@:_config=) \
+	&& \
+	cmake -B build \
+		-DCMAKE_INSTALL_PREFIX=${TARGET_INSTALL_PREFIX} \
+		-DCMAKE_FIND_ROOT_PATH=${TARGET_INSTALL_PREFIX} \
+		-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER \
+		-DAPP_MODULES_DIR=../baresip-apps/modules \
+		-DAPP_MODULES="$(BARESIP_APP_MODULES)"
+
+$(TOBUILD_CMAKE): $(CMAKE_CONFIG)
+	@echo
+	@echo "Building $(@:_cmake=)"
+	@echo
+	cd $(@:_cmake=) \
+	&& \
+	cmake --build build \
+	&& \
+	cmake --install build
+
+$(TOBUILD_GMAKE): $(GMAKE_CONFIG)
+	@echo
+	@echo "Building $(@:_gmake=)"
+	@echo
+	cd $(@:_gmake=) \
+	&& \
+	make \
+	&& \
+	make install
+
+openssl_build:: openssl/Makefile
+	@echo
+	@echo "Building $(@:_build=)"
+	@echo
+	cd $(@:_build=) \
+	&& \
+	make build_sw \
+	&& \
+	make install_sw
+
+openssl/Makefile:
+	@echo
+	@echo "Creating $@"
+	@echo
+	cd $(@:/Makefile=) \
+	&& \
+	./config \
+		--prefix=${TARGET_INSTALL_PREFIX} \
+		-D_XOPEN_SOURCE=700 shared \
+		no-tests
+
+libzrtp/configure:
+	@echo
+	@echo "Creating $@"
+	@echo
+	cd $(@:/configure=) && ./bootstrap.sh
 
 libzrtp/Makefile: libzrtp/configure
 	@echo
 	@echo "Creating $@"
 	@echo
-	cd libzrtp && ./configure --prefix=/usr
+	cd $(@:/Makefile=) \
+	&& \
+	./configure --prefix=$(TARGET_INSTALL_PREFIX)
 
 libzrtp/third_party/bnlib/Makefile: libzrtp/Makefile
 
@@ -56,12 +88,6 @@ $(TOPATCH)::
 		echo               ; \
 		sed -i 's|\(/lib\>\)|\164|g' $(@:_patch=) ; \
 	fi
-
-libzrtp/configure:
-	@echo
-	@echo "Creating $@"
-	@echo
-	cd libzrtp && ./bootstrap.sh
 
 test: build
 	@cd retest && LD_LIBRARY_PATH=$(DESTDIR)/usr/lib:$(DESTDIR)/usr/lib64 ./retest -r -v

@@ -1,22 +1,40 @@
 PATCHES :=
 
-MODULES := libzrtp re rem baresip retest
+# List of modules configured and built with cmake
+#
+CMAKE_MODULES := re rem
+
+# List of modules configured and built with make
+#
+GMAKE_MODULES += libzrtp
+
+MODULES       := $(GMAKE_MODULES) $(CMAKE_MODULES)
 
 ifeq ($(TARGET),android)
-  MODULES := openssl opus ogg $(MODULES)
+  GMAKE_MODULES += openssl
+  CMAKE_MODULES += opus
+  CMAKE_MODULES += ogg
   PATCHES := patches/re.patch
-  PATCHES += patches/re_flexisip_registration_issue.patch
 else
-  MODULES := libsrtp $(MODULES)
-  PATCHES := /dev/null
-  PATCHES := patches/re_flexisip_registration_issue.patch
-  PATCHES += patches/libzrtp_install_prefix.patch
-  # PATCHES := patches/baresip_modules_httpreq_http_conf.patch
+  CMAKE_MODULES += libsrtp
+  PATCHES := patches/libzrtp_install_prefix.patch
+  # PATCHES += patches/baresip_modules_httpreq_http_conf.patch
 endif
 
-TOWIPEALL   := $(patsubst %,%_wipeall,$(MODULES))
-TOBUILD     := $(patsubst %,%_build,$(MODULES))
-TOUNINSTALL := $(patsubst %,%_uninstall,$(MODULES))
+PATCHES += patches/re_flexisip_registration_issue.patch
+
+CMAKE_MODULES += baresip-apps
+CMAKE_MODULES += baresip
+# CMAKE_MODULES += retest
+
+GMAKE_CONFIG  := $(patsubst %,%/Makefile,$(GMAKE_MODULES))
+CMAKE_CONFIG  := $(patsubst %,%_config  ,$(CMAKE_MODULES))
+TOBUILD_GMAKE := $(patsubst %,%_gmake   ,$(GMAKE_MODULES))
+TOBUILD_CMAKE := $(patsubst %,%_cmake   ,$(CMAKE_MODULES))
+
+MODULES   := $(GMAKE_MODULES) $(CMAKE_MODULES)
+
+TOWIPEALL := $(patsubst %,%_wipeall,$(MODULES))
 
 ifneq ($(findstring android, $(TARGET)),)
   include Makefile.android
@@ -26,11 +44,16 @@ endif
 
 prepare: update $(MODULES)
 
-update: gitinit gitclean gitupdate
-
-gitinit:
+update:
+	@echo "Pulling..."
+	@git pull --all
+	@echo "Syncing..."
 	@git submodule sync
-	@git submodule update --init
+	@echo "Updating..."
+	@git submodule update --init --force
+	@echo "Pulling submodules..."
+	@git submodule foreach 'git pull --all; true'
+	@echo "Updating submodules..."
 	@git submodule foreach 'git checkout \
                                $$(                              \
                                   git config                    \
@@ -40,12 +63,6 @@ gitinit:
                                   echo master                   \
                                )'
 
-gitupdate:
-	@git submodule foreach 'git pull ; true'
-
-gitclean:
-	@git submodule foreach 'git clean -xdff ; git checkout -- .; true'
-
 clean:
 	@git submodule foreach 'make clean; true'
 
@@ -54,7 +71,7 @@ distclean: clean
 
 wipeall: $(TOWIPEALL)
 
-baresip re rem retest:
+baresip re rem retest baresip-apps:
 	@echo
 	@echo "Fetching $@"
 	@echo
@@ -64,13 +81,13 @@ libsrtp:
 	@echo
 	@echo "Fetching $@"
 	@echo
-	git submodule add https://github.com/cisco/libsrtp.git
+	git submodule add https://github.com/cisco/$@.git
 
 libzrtp:
 	@echo
 	@echo "Fetching $@"
 	@echo
-	git submodule add https://github.com/juha-h/libzrtp
+	git submodule add https://github.com/juha-h/$@
 
 openssl:
 	@echo
