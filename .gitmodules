@@ -1,26 +1,26 @@
 [submodule "libsrtp"]
 	path = libsrtp
 	url = https://github.com/cisco/libsrtp.git
-    branch = main
+	branch = main
 [submodule "libzrtp"]
 	path = libzrtp
 	url = https://github.com/juha-h/libzrtp
 [submodule "rem"]
 	path = rem
 	url = https://github.com/baresip/rem.git
-    branch = main
+	branch = main
 [submodule "re"]
 	path = re
 	url = https://github.com/baresip/re.git
-    branch = main
+	branch = main
 [submodule "baresip"]
 	path = baresip
 	url = https://github.com/baresip/baresip.git
-    branch = main
+	branch = main
 [submodule "retest"]
 	path = retest
 	url = https://github.com/baresip/retest.git
-    branch = main
+	branch = main
 [submodule "openssl"]
 	path = openssl
 	url = https://github.com/openssl/openssl.git
@@ -30,3 +30,7 @@
 [submodule "ogg"]
 	path = ogg
 	url = https://github.com/xiph/ogg.git
+[submodule "baresip-apps"]
+	path = baresip-apps
+	url = https://github.com/baresip/baresip-apps.git
+	branch = main
