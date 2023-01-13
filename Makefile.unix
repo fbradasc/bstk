@@ -23,7 +23,8 @@ $(CMAKE_CONFIG):
 		-DAPP_MODULES_DIR=../baresip-apps/modules \
 		-DAPP_MODULES="$(BARESIP_APP_MODULES)"
 
-$(TOBUILD_CMAKE): $(CMAKE_CONFIG)
+#$(TOBUILD_CMAKE):
+%_cmake: %_config
 	@echo
 	@echo "Building $(@:_cmake=)"
 	@echo
@@ -33,7 +34,8 @@ $(TOBUILD_CMAKE): $(CMAKE_CONFIG)
 	&& \
 	cmake --install build
 
-$(TOBUILD_GMAKE): $(GMAKE_CONFIG)
+#$(TOBUILD_GMAKE):
+%_gmake: %/Makefile
 	@echo
 	@echo "Building $(@:_gmake=)"
 	@echo

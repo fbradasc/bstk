@@ -51,8 +51,6 @@ update:
 	@git submodule sync
 	@echo "Updating..."
 	@git submodule update --init --force
-	@echo "Pulling submodules..."
-	@git submodule foreach 'git pull --all; true'
 	@echo "Updating submodules..."
 	@git submodule foreach 'git checkout \
                                $$(                              \
@@ -62,6 +60,8 @@ update:
                                   ||                            \
                                   echo master                   \
                                )'
+	@echo "Pulling submodules..."
+	@git submodule foreach 'git pull --all; true'
 
 clean:
 	@git submodule foreach 'make clean; true'
