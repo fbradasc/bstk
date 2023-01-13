@@ -8,15 +8,15 @@
 [submodule "rem"]
 	path = rem
 	url = https://github.com/baresip/rem.git
-    branch = v2.5.0
+    branch = main
 [submodule "re"]
 	path = re
 	url = https://github.com/baresip/re.git
-    branch = v2.5.0
+    branch = main
 [submodule "baresip"]
 	path = baresip
 	url = https://github.com/baresip/baresip.git
-    branch = v2.5.0
+    branch = main
 [submodule "retest"]
 	path = retest
 	url = https://github.com/baresip/retest.git
@@ -24,14 +24,9 @@
 [submodule "openssl"]
 	path = openssl
 	url = https://github.com/openssl/openssl.git
-    branch = OpenSSL_1_1_1q
 [submodule "opus"]
 	path = opus
 	url = https://github.com/xiph/opus.git
 [submodule "ogg"]
 	path = ogg
 	url = https://github.com/xiph/ogg.git
-[submodule "baresip-apps"]
-	path = baresip-apps
-	url = https://github.com/baresip/baresip-apps.git
-    branch = main
