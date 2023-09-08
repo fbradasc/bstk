@@ -45,8 +45,8 @@ else
   include Makefile.unix
 endif
 
-# prepare: update $(MODULES)
-prepare: $(MODULES)
+prepare: update $(MODULES)
+# prepare: $(MODULES)
 
 update:
 	@echo "Pulling..."
