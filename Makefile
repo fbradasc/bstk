@@ -29,11 +29,11 @@ CMAKE_MODULES += baresip
 # CMAKE_MODULES += retest
 
 GMAKE_CONFIG  := $(patsubst %,%/Makefile,$(GMAKE_MODULES))
-BUILD_CONFIG  := $(patsubst %,%/Makefile,$(CMAKE_MODULES))
+BUILD_CONFIG  := $(patsubst %,%/Makefile,$(BUILD_MODULES))
 CMAKE_CONFIG  := $(patsubst %,%_config  ,$(CMAKE_MODULES))
 TOBUILD_GMAKE := $(patsubst %,%_gmake   ,$(GMAKE_MODULES))
 TOBUILD_CMAKE := $(patsubst %,%_cmake   ,$(CMAKE_MODULES))
-TOBUILD_BUILD := $(patsubst %,%_build   ,$(CMAKE_MODULES))
+TOBUILD_BUILD := $(patsubst %,%_build   ,$(BUILD_MODULES))
 
 MODULES   := $(BUILD_MODULES) $(GMAKE_MODULES) $(CMAKE_MODULES)
 
