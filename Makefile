@@ -23,8 +23,8 @@ endif
 
 # PATCHES += patches/re_flexisip_registration_issue.patch
 
-CMAKE_MODULES += baresip-apps
 CMAKE_MODULES += baresip
+# CMAKE_MODULES += baresip-apps
 # CMAKE_MODULES += retest
 
 GMAKE_CONFIG  := $(patsubst %,%/Makefile,$(GMAKE_MODULES))
