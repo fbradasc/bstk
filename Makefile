@@ -2,7 +2,7 @@ PATCHES :=
 
 # List of modules configured and built with cmake
 #
-CMAKE_MODULES := re rem
+CMAKE_MODULES := re
 
 # List of modules configured and built with make
 #
@@ -71,7 +71,7 @@ distclean: clean
 
 wipeall: $(TOWIPEALL)
 
-baresip re rem retest baresip-apps:
+baresip re retest baresip-apps:
 	@echo
 	@echo "Fetching $@"
 	@echo
