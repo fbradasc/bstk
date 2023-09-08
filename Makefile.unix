@@ -31,7 +31,7 @@ $(CMAKE_CONFIG):
 	@echo
 	cd $(@:_cmake=) \
 	&& \
-	cmake --build build -j \
+	cmake --build build \
 	&& \
 	cmake --install build
 
