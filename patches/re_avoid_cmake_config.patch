@@ -1,4 +1,4 @@
-diff --git a/cmake/re-config.cmake b/cmake/re-config.cmake
+diff --git a/re/cmake/re-config.cmake b/re/cmake/re-config.cmake
 index 53f4c3b..65a801f 100644
 --- a/cmake/re-config.cmake
 +++ b/cmake/re-config.cmake
