@@ -8,7 +8,7 @@ BARESIP_APP_MODULES   ?=
 
 all: prepare patch build
 
-build: $(TOBUILD_GMAKE) $(TOBUILD_CMAKE)
+build: $(TOBUILD_BUILD) $(TOBUILD_GMAKE) $(TOBUILD_CMAKE)
 
 $(CMAKE_CONFIG):
 	@echo
