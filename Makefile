@@ -4,11 +4,11 @@ PATCHES :=
 #
 CMAKE_MODULES := re
 
+BUILD_MODULES := openssl
+
 # List of modules configured and built with make
 #
 GMAKE_MODULES += libzrtp
-
-MODULES       := $(GMAKE_MODULES) $(CMAKE_MODULES)
 
 ifeq ($(TARGET),android)
   GMAKE_MODULES += openssl
@@ -18,6 +18,7 @@ ifeq ($(TARGET),android)
 else
   CMAKE_MODULES += libsrtp
   PATCHES := patches/libzrtp_install_prefix.patch
+  PATCHES += patches/re_avoid_cmake_config.patch
   # PATCHES += patches/baresip_modules_httpreq_http_conf.patch
 endif
 
@@ -28,11 +29,13 @@ CMAKE_MODULES += baresip
 # CMAKE_MODULES += retest
 
 GMAKE_CONFIG  := $(patsubst %,%/Makefile,$(GMAKE_MODULES))
+BUILD_CONFIG  := $(patsubst %,%/Makefile,$(CMAKE_MODULES))
 CMAKE_CONFIG  := $(patsubst %,%_config  ,$(CMAKE_MODULES))
 TOBUILD_GMAKE := $(patsubst %,%_gmake   ,$(GMAKE_MODULES))
 TOBUILD_CMAKE := $(patsubst %,%_cmake   ,$(CMAKE_MODULES))
+TOBUILD_BUILD := $(patsubst %,%_build   ,$(CMAKE_MODULES))
 
-MODULES   := $(GMAKE_MODULES) $(CMAKE_MODULES)
+MODULES   := $(BUILD_MODULES) $(GMAKE_MODULES) $(CMAKE_MODULES)
 
 TOWIPEALL := $(patsubst %,%_wipeall,$(MODULES))
 
@@ -42,7 +45,8 @@ else
   include Makefile.unix
 endif
 
-prepare: update $(MODULES)
+# prepare: update $(MODULES)
+prepare: $(MODULES)
 
 update:
 	@echo "Pulling..."
