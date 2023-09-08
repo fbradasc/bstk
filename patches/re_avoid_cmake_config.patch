@@ -7,7 +7,7 @@ index 53f4c3b..f3ea69e 100644
  find_package(MBEDTLS)
  else()
 -find_package(OpenSSL "1.1.1")
-+find_package(OpenSSL "1.1.1" HINTS ../openssl/build)
++find_package(OpenSSL HINTS ${CMAKE_INSTALL_PREFIX})
  endif()
  
  option(USE_OPENSSL "Enable OpenSSL" ${OPENSSL_FOUND})
