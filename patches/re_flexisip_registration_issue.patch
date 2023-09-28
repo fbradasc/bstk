@@ -1,0 +1,13 @@
+diff --git a/re/src/sipreg/reg.c b/re/src/sipreg/reg.c
+index 76e558c..572ba85 100644
+--- a/src/sipreg/reg.c
++++ b/src/sipreg/reg.c
+@@ -313,7 +313,7 @@ static int send_handler(enum sip_transp tp, struct sa *src,
+ 	if (reg->regid > 0)
+ 		err |= mbuf_printf(mb, ";reg-id=%d", reg->regid);
+ 
+-	err |= mbuf_printf(mb, "\r\n");
++	err |= mbuf_printf(mb, "\r\nExpires: %u\r\n",reg->expires);
+ 	return err;
+ }
+ 
