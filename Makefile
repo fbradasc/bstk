@@ -22,7 +22,7 @@ else
   # PATCHES += patches/baresip_modules_httpreq_http_conf.patch
 endif
 
-# PATCHES += patches/re_flexisip_registration_issue.patch
+PATCHES += patches/re_flexisip_registration_issue.patch
 
 CMAKE_MODULES += baresip
 # CMAKE_MODULES += baresip-apps
