@@ -1,3 +1,5 @@
+PERL ?= perl
+
 MKFILES := libzrtp/Makefile \
 	libzrtp/third_party/bnlib/Makefile \
 
@@ -20,6 +22,8 @@ $(CMAKE_CONFIG):
 		-DCMAKE_INSTALL_PREFIX=${TARGET_INSTALL_PREFIX} \
 		-DCMAKE_FIND_ROOT_PATH=${TARGET_INSTALL_PREFIX} \
 		-DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER \
+		-DCMAKE_MODULE_LINKER_FLAGS="-L${TARGET_INSTALL_PREFIX}/lib64 -lldap" \
+		-DCMAKE_SHARED_LINKER_FLAGS="-L${TARGET_INSTALL_PREFIX}/lib64 -lldap" \
 		-DCMAKE_VERBOSE_MAKEFILE=ON \
 		-DAPP_MODULES_DIR=../baresip-apps/modules \
 		-DAPP_MODULES="$(BARESIP_APP_MODULES)"
@@ -52,9 +56,66 @@ openssl_build:: openssl/Makefile
 	@echo
 	cd $(@:_build=) \
 	&& \
-	make build_sw \
+	( make PERL=$(PERL) Makefile ; true ) \
+    && \
+    make PERL=$(PERL) build_sw \
 	&& \
-	make install_sw
+	make PERL=$(PERL) install_sw
+
+openldap/Makefile:
+	@echo
+	@echo "Creating $@"
+	@echo
+	cd $(@:/Makefile=) \
+	&& \
+	CPPFLAGS="-DOPENSSL_NO_MD2 -I${TARGET_INSTALL_PREFIX}/include" \
+	LDFLAGS="-L${TARGET_INSTALL_PREFIX}/usr/lib/ -L${TARGET_INSTALL_PREFIX}/usr/lib64" \
+	./configure \
+		--prefix=${TARGET_INSTALL_PREFIX} \
+		--exec-prefix=${TARGET_INSTALL_PREFIX} \
+		--sysconfdir=${TARGET_INSTALL_PREFIX}/opeldap/etc \
+		--mandir=${TARGET_INSTALL_PREFIX}/opeldap/man \
+		--localstatedir=${TARGET_INSTALL_PREFIX}/opeldap/var \
+		--libdir=${TARGET_INSTALL_PREFIX}/lib64 \
+		--with-sysroot=${TARGET_INSTALL_PREFIX} \
+		\
+		--enable-debug \
+		--enable-dynamic \
+		--enable-syslog \
+		--enable-ipv6 \
+		--enable-local \
+		\
+		--enable-slapd \
+		--enable-dynacl \
+		--enable-aci \
+		--enable-cleartext \
+		--enable-crypt \
+		--enable-spasswd \
+		--enable-modules \
+		--enable-rlookups \
+		--enable-slapi \
+		--disable-slp \
+		--enable-wrappers \
+		\
+		--enable-backends=mod \
+		--enable-mdb=yes \
+		--enable-perl=yes \
+		--enable-argon2 \
+		--with-argon2=libsodium \
+		--disable-wt \
+		\
+		--enable-overlays=mod \
+		\
+		--disable-static \
+		--enable-shared \
+		\
+		--with-cyrus-sasl \
+		--without-fetch \
+		--with-threads \
+		--with-pic \
+		--with-tls \
+		&& \
+		make depend
 
 openssl/Makefile:
 	@echo

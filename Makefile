@@ -16,6 +16,7 @@ ifeq ($(TARGET),android)
   CMAKE_MODULES += ogg
   PATCHES := patches/re.patch
 else
+  GMAKE_MODULES += openldap
   CMAKE_MODULES += libsrtp
   PATCHES := patches/libzrtp_install_prefix.patch
   PATCHES += patches/re_avoid_cmake_config.patch
@@ -92,6 +93,12 @@ libzrtp:
 	@echo "Fetching $@"
 	@echo
 	git submodule add https://github.com/juha-h/$@
+
+openldap:
+	@echo
+	@echo "Fetching $@"
+	@echo
+	git submodule add -b OPENLDAP_REL_ENG_2_6 https://github.com/openldap/$@.git
 
 openssl:
 	@echo

@@ -34,3 +34,7 @@
 	path = baresip-apps
 	url = https://github.com/baresip/baresip-apps.git
 	branch = main
+[submodule "openldap"]
+	path = openldap
+	url = https://github.com/openldap/openldap.git
+	branch = OPENLDAP_REL_ENG_2_6

@@ -1,0 +1,13 @@
+diff --git a/cmake/re-config.cmake b/cmake/re-config.cmake
+index 68c0c80..8d19f26 100644
+--- a/cmake/re-config.cmake
++++ b/cmake/re-config.cmake
+@@ -13,7 +13,7 @@ find_package(ZLIB)
+ if (USE_MBEDTLS)
+ find_package(MBEDTLS)
+ else()
+-find_package(OpenSSL "1.1.1")
++    find_package(OpenSSL "1.1.1" PATHS ../install/ NO_DEFAULT_PATH)
+ endif()
+ 
+ option(USE_OPENSSL "Enable OpenSSL" )
